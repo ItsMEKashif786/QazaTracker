@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qaza Namaz Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Animation libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+</head>
+<body>
+    <div class="page-container">
+        <div class="nav-menu">
+            <div class="nav-item active" data-page="dashboard">
+                <i class="fas fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-page="tracker">
+                <i class="fas fa-pray"></i>
+                <span>Tracker</span>
+            </div>
+            <div class="nav-item" data-page="settings">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </div>
+        </div>
+
+        <div class="content-container">
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="page active animate__animated animate__fadeIn">
+                <header class="dashboard-header">
+                    <h1 class="animate__animated animate__fadeInDown">Qaza Namaz Dashboard</h1>
+                    <div class="madina-image-container">
+                        <img src="assets/madina.svg" alt="Madina Mosque" class="madina-image">
+                    </div>
+                </header>
+                
+                <div class="dashboard-overview animate__animated animate__fadeInUp">
+                    <!-- Main analytics section -->
+                    <div class="main-analytics-container">
+                        <!-- Total prayers with circular progress -->
+                        <div class="total-prayers-circle-card" data-aos="zoom-in" data-aos-delay="100">
+                            <div id="totalCircleProgress" class="total-circle-progress">
+                                <div class="inner-total-circle">
+                                    <div class="total-count-title">Total Remaining</div>
+                                    <div id="totalRemainingCount" class="total-count">0</div>
+                                    <div class="card-description">Qaza Prayers</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Daily analysis section -->
+                        <div class="daily-analysis-card" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="card-title">Daily Analysis</div>
+                            <div class="daily-stats">
+                                <div class="stat-item">
+                                    <div class="stat-title">Completed Today</div>
+                                    <div id="todayCompletedCount" class="stat-count">0</div>
+                                </div>
+                                <div class="stat-divider"></div>
+                                <div class="stat-item">
+                                    <div class="stat-title">Average/Day</div>
+                                    <div id="averagePerDay" class="stat-count">0</div>
+                                </div>
+                            </div>
+                            <div class="completion-forecast">
+                                <div class="forecast-title">Estimated Completion</div>
+                                <div id="completionForecast" class="forecast-time">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-container">
+                        <div class="analytics-row">
+                            <div class="progress-card" data-aos="fade-right" data-aos-delay="200">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="fajrProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Fajr</span>
+                                            <span class="prayer-count" id="fajrDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-card" data-aos="fade-left" data-aos-delay="300">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="zoharProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Zohar</span>
+                                            <span class="prayer-count" id="zoharDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-row">
+                            <div class="progress-card" data-aos="fade-right" data-aos-delay="400">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="asarProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Asar</span>
+                                            <span class="prayer-count" id="asarDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-card" data-aos="fade-left" data-aos-delay="500">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="maghribProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Maghrib</span>
+                                            <span class="prayer-count" id="maghribDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analytics-row">
+                            <div class="progress-card" data-aos="fade-right" data-aos-delay="600">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="ishaProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Isha</span>
+                                            <span class="prayer-count" id="ishaDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-card" data-aos="fade-left" data-aos-delay="700">
+                                <div class="progress-circle-container">
+                                    <div class="progress-circle" id="witrProgress">
+                                        <div class="inner-circle">
+                                            <span class="prayer-name">Witr</span>
+                                            <span class="prayer-count" id="witrDashCount">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracker Page -->
+            <div id="trackerPage" class="page animate__animated animate__fadeIn" style="display: none;">
+                <header>
+                    <h1 class="animate__animated animate__fadeInDown">Qaza Namaz Tracker</h1>
+                    <div class="header-actions">
+                        <button id="settingsBtn" class="btn btn-primary animate__animated animate__pulse animate__infinite">
+                            <i class="fas fa-cog"></i> Set Namaz Count
+                        </button>
+                        <button id="downloadBtn" class="btn btn-secondary">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </header>
+                
+                <main>
+                    <div id="namazCards" class="namaz-cards">
+                        <!-- Namaz cards will be dynamically inserted here -->
+                    </div>
+                </main>
+            </div>
+        
+            <!-- Settings Panel -->
+            <div id="settingsPanel" class="settings-panel">
+                <div class="settings-content">
+                    <div class="settings-header">
+                        <h2>Set Namaz Count</h2>
+                        <button id="closeSettings" class="btn-close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="settings-body">
+                        <div class="form-group">
+                            <label for="fajrCount">Fajr</label>
+                            <input type="number" id="fajrCount" min="0" placeholder="Enter count">
+                        </div>
+                        <div class="form-group">
+                            <label for="zoharCount">Zohar</label>
+                            <input type="number" id="zoharCount" min="0" placeholder="Enter count">
+                        </div>
+                        <div class="form-group">
+                            <label for="asarCount">Asar</label>
+                            <input type="number" id="asarCount" min="0" placeholder="Enter count">
+                        </div>
+                        <div class="form-group">
+                            <label for="maghribCount">Maghrib</label>
+                            <input type="number" id="maghribCount" min="0" placeholder="Enter count">
+                        </div>
+                        <div class="form-group">
+                            <label for="ishaCount">Isha</label>
+                            <input type="number" id="ishaCount" min="0" placeholder="Enter count">
+                        </div>
+                        <div class="form-group">
+                            <label for="witrCount">Witr</label>
+                            <input type="number" id="witrCount" min="0" placeholder="Enter count">
+                        </div>
+                    </div>
+                    <div class="settings-footer">
+                        <button id="saveSettings" class="btn btn-primary animate__animated animate__pulse">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Overlay -->
+            <div id="overlay" class="overlay"></div>
+            
+            <!-- Confirmation Dialog -->
+            <div id="confirmationDialog" class="confirmation-dialog">
+                <div class="confirmation-dialog-title">
+                    <i class="fas fa-question-circle"></i> Confirmation
+                </div>
+                <div class="confirmation-dialog-content">
+                    Did you perform the salah?
+                </div>
+                <div class="confirmation-dialog-actions">
+                    <button id="confirmNo" class="confirmation-dialog-button confirm-no">No</button>
+                    <button id="confirmYes" class="confirmation-dialog-button confirm-yes">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animation library script -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- CircleProgress library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/progressbar.js/1.1.0/progressbar.min.js"></script>
+    
+    <!-- App scripts -->
+    <script src="js/namazManager.js"></script>
+    <script src="js/dashboardManager.js"></script>
+    <script src="js/uiManager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
