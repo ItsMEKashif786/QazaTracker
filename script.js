@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const downloadBtn = document.getElementById('downloadBtn');
     const settingsPanel = document.getElementById('settingsPanel');
     const overlay = document.getElementById('overlay');
+    const notification = document.getElementById('notification');
     
     // Namaz data structure
     let namazData = [
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function init() {
         loadFromLocalStorage();
         renderDashboard();
+        addRippleEffects();
     }
     
     // Render the dashboard with namaz cards
@@ -31,15 +33,16 @@ document.addEventListener('DOMContentLoaded', function() {
         namazData.forEach((namaz, index) => {
             const card = document.createElement('div');
             card.className = 'namaz-card';
+            card.style.animationDelay = `${index * 0.1}s`;
             card.innerHTML = `
                 <div class="namaz-header">
                     <span class="namaz-name">${namaz.name}</span>
-                    <span class="namaz-count">${namaz.count}</span>
                 </div>
+                <div class="namaz-count" id="count-${index}">${namaz.count}</div>
                 <div class="namaz-actions">
-                    <button class="btn-decrement" data-index="${index}">-1</button>
-                    <button class="btn-undo" data-index="${index}" title="Undo last change">
-                        <i class="fas fa-undo"></i>
+                    <button class="btn-decrement ripple" data-index="${index}">-1</button>
+                    <button class="btn-undo ripple" data-index="${index}" title="Undo last change">
+                        <i class="fas fa-undo"></i> Undo
                     </button>
                 </div>
             `;
@@ -54,52 +57,124 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.btn-undo').forEach(btn => {
             btn.addEventListener('click', undoCount);
         });
+        
+        // Re-add ripple effects
+        addRippleEffects();
     }
     
-    // Decrement namaz count
+    // Add ripple effect to buttons
+    function addRippleEffects() {
+        document.querySelectorAll('.ripple').forEach(button => {
+            // Remove existing event listener to prevent duplicates
+            button.removeEventListener('click', createRipple);
+            button.addEventListener('click', createRipple);
+        });
+    }
+    
+    function createRipple(e) {
+        const button = e.currentTarget;
+        const rect = button.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-effect';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        button.appendChild(ripple);
+        
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    }
+    
+    // Decrement namaz count with animation
     function decrementCount(e) {
         const index = e.target.getAttribute('data-index');
         if (namazData[index].count > 0) {
             // Store previous count before decrementing
             namazData[index].previousCount = namazData[index].count;
             namazData[index].count--;
+            
+            // Update with animation
+            const countElement = document.getElementById(`count-${index}`);
+            if (countElement) {
+                countElement.textContent = namazData[index].count;
+                countElement.classList.add('count-updated');
+                setTimeout(() => {
+                    countElement.classList.remove('count-updated');
+                }, 500);
+            }
+            
             saveToLocalStorage();
-            renderDashboard();
+            
+            // Button press feedback
+            e.target.classList.add('button-shake');
+            setTimeout(() => {
+                e.target.classList.remove('button-shake');
+            }, 400);
+        } else {
+            // Shake button if count is already 0
+            e.target.classList.add('button-shake');
+            setTimeout(() => {
+                e.target.classList.remove('button-shake');
+            }, 400);
+            showNotification(`${namazData[index].name} count is already 0`);
         }
     }
     
-    // Undo the last count change
+    // Undo the last count change with animation
     function undoCount(e) {
         const index = e.target.getAttribute('data-index');
-        if (namazData[index].previousCount !== null) {
+        if (namazData[index].previousCount !== null && namazData[index].previousCount !== namazData[index].count) {
             // Swap current and previous counts
             const temp = namazData[index].count;
             namazData[index].count = namazData[index].previousCount;
             namazData[index].previousCount = temp;
-            saveToLocalStorage();
-            renderDashboard();
             
-            // Show undo notification
+            // Update with animation
+            const countElement = document.getElementById(`count-${index}`);
+            if (countElement) {
+                countElement.textContent = namazData[index].count;
+                countElement.classList.add('count-updated');
+                setTimeout(() => {
+                    countElement.classList.remove('count-updated');
+                }, 500);
+            }
+            
+            saveToLocalStorage();
+            
+            // Button press feedback
+            e.target.classList.add('button-shake');
+            setTimeout(() => {
+                e.target.classList.remove('button-shake');
+            }, 400);
+            
             showNotification(`Undo successful for ${namazData[index].name}`);
+        } else {
+            // Shake button if nothing to undo
+            e.target.classList.add('button-shake');
+            setTimeout(() => {
+                e.target.classList.remove('button-shake');
+            }, 400);
+            showNotification(`Nothing to undo for ${namazData[index].name}`);
         }
     }
     
     // Show notification
     function showNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'undo-notification';
         notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        // Show notification
         notification.style.display = 'block';
         
-        // Hide after 3 seconds
+        // Reset animation
+        notification.style.animation = 'none';
+        void notification.offsetWidth; // Trigger reflow
+        notification.style.animation = 'slideInUp 0.3s ease forwards, fadeOut 0.3s ease 2.7s forwards';
+        
+        // Hide after animation completes
         setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
+            notification.style.display = 'none';
         }, 3000);
     }
     
@@ -160,6 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+        
+        showNotification('Download started');
     }
     
     // Save data to localStorage
