@@ -2,10 +2,11 @@
     --primary-color: #4a6fa5;
     --secondary-color: #166088;
     --accent-color: #4fc3a1;
+    --accent-dark: #3da58a;
     --light-color: #f8f9fa;
     --dark-color: #343a40;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 * {
@@ -51,38 +52,46 @@ h1 {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
+    padding: 10px 15px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
     transition: var(--transition);
+    box-shadow: var(--shadow);
 }
 
 .btn-settings:hover {
     background-color: var(--secondary-color);
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-settings:active {
+    transform: translateY(0);
 }
 
 .btn-download {
     background-color: transparent;
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition);
+    box-shadow: var(--shadow);
 }
 
 .btn-download:hover {
     background-color: var(--primary-color);
     color: white;
+    transform: translateY(-2px);
 }
 
 .dashboard {
@@ -93,24 +102,29 @@ h1 {
 
 .namaz-card {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 20px;
     box-shadow: var(--shadow);
     transition: var(--transition);
     display: flex;
     flex-direction: column;
+    animation: cardEnter 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-.namaz-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+@keyframes cardEnter {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .namaz-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .namaz-name {
@@ -120,54 +134,83 @@ h1 {
 }
 
 .namaz-count {
-    font-size: 24px;
+    font-size: 42px;
     font-weight: 600;
+    margin: 15px 0;
+    text-align: center;
+    transition: all 0.3s ease;
+    color: var(--primary-color);
+}
+
+.count-updated {
+    animation: countPulse 0.5s ease;
+}
+
+@keyframes countPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
 }
 
 .namaz-actions {
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
     align-items: center;
+    margin-top: 10px;
 }
 
 .btn-decrement {
     background-color: var(--accent-color);
     color: white;
     border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 18px;
+    width: 80px;
+    height: 50px;
+    border-radius: 8px;
+    font-size: 24px;
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-decrement:hover {
-    background-color: #3da58a;
-    transform: scale(1.05);
+    background-color: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-decrement:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
 }
 
 .btn-undo {
-    background-color: transparent;
-    color: #6c757d;
+    background-color: #f1f1f1;
+    color: var(--dark-color);
     border: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    width: 80px;
+    height: 40px;
+    border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
     transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .btn-undo:hover {
-    background-color: #f1f1f1;
-    color: var(--dark-color);
+    background-color: #e1e1e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-undo:active {
+    transform: translateY(0);
 }
 
 /* Settings Panel */
@@ -180,7 +223,7 @@ h1 {
     background-color: white;
     box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    transition: var(--transition);
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -188,6 +231,7 @@ h1 {
 
 .settings-panel.active {
     right: 0;
+    transform: translateX(0);
 }
 
 .settings-header {
@@ -211,11 +255,17 @@ h1 {
     cursor: pointer;
     color: #6c757d;
     transition: var(--transition);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .btn-close:hover {
+    background-color: #f1f1f1;
     color: var(--dark-color);
-    transform: rotate(90deg);
 }
 
 .settings-content {
@@ -236,9 +286,9 @@ h1 {
 
 .count-input {
     width: 100%;
-    padding: 10px 15px;
+    padding: 12px 15px;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     transition: var(--transition);
 }
@@ -256,18 +306,27 @@ h1 {
 
 .btn-save {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
     transition: var(--transition);
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-save:hover {
     background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-save:active {
+    transform: translateY(0);
 }
 
 .overlay {
@@ -286,6 +345,75 @@ h1 {
 .overlay.active {
     opacity: 1;
     visibility: visible;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--accent-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1001;
+    display: none;
+    animation: slideInUp 0.3s ease forwards, fadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translate(-50%, 100%);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Button animations */
+@keyframes buttonShake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+}
+
+.button-shake {
+    animation: buttonShake 0.4s ease;
+}
+
+/* Ripple effect */
+.ripple {
+    position: relative;
+    overflow: hidden;
+}
+
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
 }
 
 /* Responsive Design */
@@ -309,25 +437,36 @@ h1 {
         width: 100%;
         right: -100%;
     }
+    
+    .btn-decrement, .btn-undo {
+        width: 70px;
+    }
 }
 
-/* Animation for undo */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.undo-notification {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: var(--accent-color);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: var(--shadow);
-    animation: fadeIn 0.3s ease;
-    z-index: 1001;
-    display: none;
-}
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 24px;
+    }
+    
+    .namaz-card {
+        padding: 15px;
+    }
+    
+    .namaz-count {
+        font-size: 36px;
+    }
+    
+    .btn-decrement, .btn-undo {
+        width: 65px;
+        font-size: 13px;
+    }
+    
+    .btn-decrement {
+        height: 45px;
+        font-size: 20px;
+    }
+    }
